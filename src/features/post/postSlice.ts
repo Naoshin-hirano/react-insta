@@ -37,11 +37,17 @@ export const fetchAsyncPatchLiked = createAsyncThunk(
     const currentLiked = liked.current;
     const uploadData = new FormData();
 
+    //isOverLapped: お気に入り登録しているかどうか
+    //リクエストするuploadDataの定義
     let isOverlapped = false;
+    //current(現在のlikedの数)にlikes.new(クリック主のloginId)があるかないか１つづつ比較
+    //あればそのloginIdをcurrentから省いてuplodatDataを定義してリクエスト送り、なければcurrentに追加してuploadDataを定義してリクエスト送る。
     currentLiked.forEach((current) => {
       if (current === liked.new) {
+        //currentの中にクリックしてきたuserIdがあればそのuserIdをuploadDataから省いた状態でリクエスト送る
         isOverlapped = true;
       } else {
+        //currentの中にクリックしてきたuserIdがなければuploadDataにcurrentを追加する
         uploadData.append("liked", String(current));
       }
     });
@@ -58,6 +64,7 @@ export const fetchAsyncPatchLiked = createAsyncThunk(
       });
       return res.data;
     }
+
     const res = await axios.patch(`${apiUrlPost}${liked.id}/`, uploadData, {
       headers: {
         "Content-Type": "application/json",

@@ -85,9 +85,11 @@ const Core: React.FC = () => {
         dispatch(resetOpenSignIn());
         const result = await dispatch(fetchAsyncGetMyProf());
         if (fetchAsyncGetMyProf.rejected.match(result)) {
+          //認証失敗した場合
           dispatch(setOpenSignIn());
           return null;
         }
+        //認証成功した場合
         await dispatch(fetchAsyncGetPosts());
         await dispatch(fetchAsyncGetProfs());
         await dispatch(fetchAsyncGetComments());

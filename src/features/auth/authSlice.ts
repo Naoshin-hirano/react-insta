@@ -45,6 +45,7 @@ export const fetchAsyncCreateProf = createAsyncThunk(
 export const fetchAsyncUpdateProf = createAsyncThunk(
   "profile/put",
   async (profile: PROPS_PROFILE) => {
+    //FormData: formにsubmitするデータを作成する。下ではEditProfile.tsxのform内のnicknameやimgを更新してる
     const uploadData = new FormData();
     uploadData.append("nickName", profile.nickName);
     profile.img && uploadData.append("img", profile.img, profile.img.name);
@@ -105,30 +106,39 @@ export const authSlice = createSlice({
     ],
   },
   reducers: {
+    //loadingの実施
     fetchCredStart(state) {
       state.isLoadingAuth = true;
     },
+    //loadingの終了
     fetchCredEnd(state) {
       state.isLoadingAuth = false;
     },
+    //SignInモーダルを表示
     setOpenSignIn(state) {
       state.openSignIn = true;
     },
+    //SignInモーダルを閉じる
     resetOpenSignIn(state) {
       state.openSignIn = false;
     },
+    //SignUpモーダルを表示
     setOpenSignUp(state) {
       state.openSignUp = true;
     },
+    //SignUpモーダルを閉じる
     resetOpenSignUp(state) {
       state.openSignUp = false;
     },
+    //プロフィールモーダルを表示
     setOpenProfile(state) {
       state.openProfile = true;
     },
+    //プロフィールモーダルを閉じる
     resetOpenProfile(state) {
       state.openProfile = false;
     },
+    //プロフィールモーダル内でユーザー名を更新
     editNickname(state, action) {
       state.myprofile.nickName = action.payload;
     },

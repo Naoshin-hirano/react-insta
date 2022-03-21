@@ -4,20 +4,22 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from "./Auth.module.css";
 import Modal from "react-modal";
 import { Formik } from "formik";
-// import * as Yup from "yup";
 import { object, string } from "yup";
 import { TextField, Button, CircularProgress } from "@material-ui/core";
 
 import { fetchAsyncGetPosts, fetchAsyncGetComments } from "../post/postSlice";
 
 import {
+  //selector
   selectIsLoadingAuth,
   selectOpenSignIn,
   selectOpenSignUp,
+  //actions
   setOpenSignIn,
   resetOpenSignIn,
   setOpenSignUp,
   resetOpenSignUp,
+  //ReduxThunk
   fetchCredStart,
   fetchCredEnd,
   fetchAsyncLogin,
@@ -50,6 +52,7 @@ const Auth: React.FC = () => {
   const isLoadingAuth = useSelector(selectIsLoadingAuth);
   const dispatch: AppDispatch = useDispatch();
 
+  //新規登録・ログインのモーダル
   return (
     <>
       <Modal
@@ -67,6 +70,7 @@ const Auth: React.FC = () => {
             const resultReg = await dispatch(fetchAsyncRegister(values));
 
             if (fetchAsyncRegister.fulfilled.match(resultReg)) {
+              //新規登録が完了したら, その登録したvalues(emailとpassword)を元にログインも行う
               await dispatch(fetchAsyncLogin(values));
               await dispatch(fetchAsyncCreateProf({ nickName: "anonymous" }));
 
