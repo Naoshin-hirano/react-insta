@@ -90,6 +90,7 @@ const Post: React.FC<PROPS_POST> = ({
             checked={liked.some((like) => like === loginId)}
             onChange={handlerLiked}
           />
+          <span data-testid="counter" className={styles.counter_padding}>{liked.length === 0 ? null : liked.length }</span>
           <strong> {prof[0]?.nickName}</strong> {title}
           <AvatarGroup max={7}>
             {liked.map((like) => (
