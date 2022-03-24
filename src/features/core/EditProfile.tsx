@@ -5,6 +5,7 @@ import styles from "./Core.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 
+import { Spacer} from "../common/Spacer";
 import { File } from "../types";
 
 import {
@@ -17,7 +18,7 @@ import {
   fetchAsyncUpdateProf,
 } from "../auth/authSlice";
 
-import { Button, TextField, IconButton } from "@material-ui/core";
+import { Button, TextField, IconButton, Grid } from "@material-ui/core";
 import { MdAddAPhoto } from "react-icons/md";
 
 const customStyles = {
@@ -26,11 +27,16 @@ const customStyles = {
     left: "50%",
 
     width: 280,
-    height: 220,
+    height: 330,
     padding: "50px",
 
     transform: "translate(-50%, -50%)",
   },
+};
+
+const avatarStyles = {
+  width: 100,
+  heigth: 300,
 };
 
 const EditProfile: React.FC = () => {
@@ -38,6 +44,7 @@ const EditProfile: React.FC = () => {
   const openProfile = useSelector(selectOpenProfile);
   const profile = useSelector(selectProfile);
   const [image, setImage] = useState<File | null>(null);
+  const upload_file_url = image ? URL.createObjectURL(image as File) : "";
 
   const updateProfile = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -47,10 +54,11 @@ const EditProfile: React.FC = () => {
     await dispatch(fetchAsyncUpdateProf(packet));
     await dispatch(fetchCredEnd());
     await dispatch(resetOpenProfile());
+    setImage(null);
   };
 
   const handlerEditPicture = () => {
-    const fileInput = document.getElementById("imageInput");
+    const fileInput = document.getElementById("imageInput") as HTMLInputElement;
     fileInput?.click();
   };
 
@@ -60,6 +68,7 @@ const EditProfile: React.FC = () => {
         isOpen={openProfile}
         onRequestClose={async () => {
           await dispatch(resetOpenProfile());
+          setImage(null);
         }}
         style={customStyles}
       >
@@ -73,7 +82,10 @@ const EditProfile: React.FC = () => {
             value={profile?.nickName}
             onChange={(e) => dispatch(editNickname(e.target.value))}
           />
-
+          <Spacer size={10}/>
+          <Grid container justifyContent="center">
+           {image ? <img data-testid="handler" style={avatarStyles} src={upload_file_url}/> : ""}
+          </Grid>
           <input
             type="file"
             id="imageInput"
