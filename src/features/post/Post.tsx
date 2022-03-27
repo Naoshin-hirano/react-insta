@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState  } from "react";
 import styles from "./Post.module.css";
 
-import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Divider, Checkbox } from "@material-ui/core";
+import { Avatar, Checkbox } from "@material-ui/core";
 import { Favorite, FavoriteBorder } from "@material-ui/icons";
 
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
+import CommentModal from "./CommentModal";
 
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
@@ -18,17 +18,10 @@ import {
   fetchPostEnd,
   fetchAsyncPostComment,
   fetchAsyncPatchLiked,
+  setOpenCommentModal,
 } from "./postSlice";
 
 import { PROPS_POST } from "../types";
-
-const useStyles = makeStyles((theme) => ({
-  small: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-    marginRight: theme.spacing(1),
-  },
-}));
 
 const Post: React.FC<PROPS_POST> = ({
   postId,
@@ -38,18 +31,23 @@ const Post: React.FC<PROPS_POST> = ({
   imageUrl,
   liked,
 }) => {
-  const classes = useStyles();
   const dispatch: AppDispatch = useDispatch();
   const profiles = useSelector(selectProfiles);
-  const comments = useSelector(selectComments);
+  
   const [text, setText] = useState("");
+  //クリックした投稿ID
+  const [clickPostId, setClickPostId] = useState(0);
 
-  const commentsOnPost = comments.filter((com) => {
-    return com.post === postId;
-  });
-
+  //投稿のコメント
+  const comments = useSelector(selectComments);
+  //投稿のuser情報
   const prof = profiles.filter((prof) => {
     return prof.userProfile === userPost;
+  });
+
+  //その投稿IDのコメントであることを定義
+  const commentsOnPost = comments.filter((com) => {
+    return com.post === postId;
   });
 
   const postComment = async (e: React.MouseEvent<HTMLElement>) => {
@@ -71,6 +69,12 @@ const Post: React.FC<PROPS_POST> = ({
     await dispatch(fetchPostStart());
     await dispatch(fetchAsyncPatchLiked(packet));
     await dispatch(fetchPostEnd());
+  };
+
+  const openCommentsModal = async () => {
+    await setClickPostId(0);
+    await dispatch(setOpenCommentModal());
+    await setClickPostId(postId);
   };
 
   if (title) {
@@ -103,31 +107,12 @@ const Post: React.FC<PROPS_POST> = ({
           </AvatarGroup>
         </h4>
 
-        <Divider />
-        <div className={styles.post_comments}>
-          {commentsOnPost.map((comment) => (
-            <div key={comment.id} className={styles.post_comment}>
-              <Avatar
-                src={
-                  profiles.find(
-                    (prof) => prof.userProfile === comment.userComment
-                  )?.img
-                }
-                className={classes.small}
-              />
-              <p>
-                <strong className={styles.post_strong}>
-                  {
-                    profiles.find(
-                      (prof) => prof.userProfile === comment.userComment
-                    )?.nickName
-                  }
-                </strong>
-                {comment.text}
-              </p>
-            </div>
-          ))}
-        </div>
+        { clickPostId >= 1 && <CommentModal
+         commentsOnPost={commentsOnPost}
+         prof={prof[0]}
+        />}
+        { commentsOnPost.length >= 1 && <div onClick={openCommentsModal} className={styles.comment_padding}
+        >コメント{commentsOnPost.length}件をすべて見る</div>}
 
         <form className={styles.post_commentBox}>
           <input

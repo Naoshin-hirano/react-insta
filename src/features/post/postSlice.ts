@@ -104,6 +104,9 @@ export const postSlice = createSlice({
   initialState: {
     isLoadingPost: false,
     openNewPost: false,
+    //コメントモーダル
+    openCommentModal:false,
+    //userPost: どのuserの投稿か
     posts: [
       {
         id: 0,
@@ -135,6 +138,13 @@ export const postSlice = createSlice({
     },
     resetOpenNewPost(state) {
       state.openNewPost = false;
+    },
+    //コメントモーダル
+    setOpenCommentModal(state) {
+      state.openCommentModal = true;
+    },
+    resetOpenCommentModal(state) {
+      state.openCommentModal = false;
     },
   },
   extraReducers: (builder) => {
@@ -178,11 +188,15 @@ export const {
   fetchPostEnd,
   setOpenNewPost,
   resetOpenNewPost,
+  setOpenCommentModal,
+  resetOpenCommentModal
 } = postSlice.actions;
 
 export const selectIsLoadingPost = (state: RootState) =>
   state.post.isLoadingPost;
 export const selectOpenNewPost = (state: RootState) => state.post.openNewPost;
+//コメントモーダル
+export const selectOpenCommentModal = (state: RootState) => state.post.openCommentModal;
 export const selectPosts = (state: RootState) => state.post.posts;
 export const selectComments = (state: RootState) => state.post.comments;
 

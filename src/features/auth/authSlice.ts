@@ -95,6 +95,7 @@ export const authSlice = createSlice({
       created_on: "",
       img: "",
     },
+    //userProfile: どのuserのプロフィールか
     profiles: [
       {
         id: 0,
