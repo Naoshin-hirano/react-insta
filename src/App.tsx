@@ -5,6 +5,7 @@ import styles from "./App.module.css";
 import Header from "./features/core/Header";
 import Core from "./features/core/Core";
 import Favorite from "./features/core/Favorite";
+import UserAccount from "./features/auth/UserAccount";
 
 const App: FC = () => {
   return (
@@ -15,8 +16,11 @@ const App: FC = () => {
           <Route exact path="/">
             <Core />
           </Route>
-          <Route exact path="/Favorite">
+          <Route exact path="/favorite">
             <Favorite />
+          </Route>
+          <Route exact path="/user/:id">
+            <UserAccount />
           </Route>
         </Switch>
       </BrowserRouter>

@@ -42,6 +42,11 @@ title: string;
 imageUrl: string;
 liked: number[];
 }
+// UserPostImageList.tsx
+export interface PROPS_USER_IMAGELIST {
+  title: string;
+  imageUrl: string;
+}
 //CommentModal.tsx
 export interface PROPS_COMMENTS_ON_COMMENT_MODAL {
   //配列[]にしないとmapやfindできないので注意

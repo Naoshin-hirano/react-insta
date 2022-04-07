@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import styles from "./Core.module.css";
+import styles from "./Auth.module.css";
 
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
@@ -16,7 +16,7 @@ import {
   fetchCredStart,
   fetchCredEnd,
   fetchAsyncUpdateProf,
-} from "../auth/authSlice";
+} from "./authSlice";
 
 import { Button, TextField, IconButton, Grid } from "@material-ui/core";
 import { MdAddAPhoto } from "react-icons/md";
@@ -39,7 +39,7 @@ const avatarStyles = {
   heigth: 300,
 };
 
-const EditProfile: React.FC = () => {
+const EditProfile: React.FC<any> = (props:any) => {
   const dispatch: AppDispatch = useDispatch();
   const openProfile = useSelector(selectOpenProfile);
   const profile = useSelector(selectProfile);
@@ -53,8 +53,9 @@ const EditProfile: React.FC = () => {
     await dispatch(fetchCredStart());
     await dispatch(fetchAsyncUpdateProf(packet));
     await dispatch(fetchCredEnd());
-    await dispatch(resetOpenProfile());
+    dispatch(resetOpenProfile());
     setImage(null);
+    props.setUseraccount(profile);
   };
 
   const handlerEditPicture = () => {
@@ -67,13 +68,14 @@ const EditProfile: React.FC = () => {
       <Modal
         isOpen={openProfile}
         onRequestClose={async () => {
-          await dispatch(resetOpenProfile());
+          dispatch(resetOpenProfile());
+          dispatch(editNickname(props.userAccount.nickName));
           setImage(null);
         }}
         style={customStyles}
       >
-        <form className={styles.core_signUp}>
-          <h1 className={styles.core_title}>SNS clone</h1>
+        <form className={styles.editprofile_signUp}>
+          <h1 className={styles.editprofile_title}>Profile</h1>
 
           <br />
           <TextField

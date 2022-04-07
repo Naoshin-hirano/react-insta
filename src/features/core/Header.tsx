@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory, withRouter } from 'react-router-dom';
 import Auth from "../auth/Auth";
 
@@ -25,21 +25,15 @@ import {
   resetOpenSignIn,
   setOpenSignUp,
   resetOpenSignUp,
-  setOpenProfile,
   resetOpenProfile,
-  fetchAsyncGetMyProf,
-  fetchAsyncGetProfs,
 } from "../auth/authSlice";
 
 import {
   selectIsLoadingPost,
   setOpenNewPost,
   resetOpenNewPost,
-  fetchAsyncGetPosts,
-  fetchAsyncGetComments,
 } from "../post/postSlice";
 
-import EditProfile from "./EditProfile";
 import NewPost from "./NewPost";
 
 const StyledBadge = withStyles((theme) => ({
@@ -77,34 +71,15 @@ const Header: React.FC = () => {
   const isLoadingPost = useSelector(selectIsLoadingPost);
   const isLoadingAuth = useSelector(selectIsLoadingAuth);
 
-  useEffect(() => {
-    const fetchBootLoader = async () => {
-      if (localStorage.localJWT) {
-        dispatch(resetOpenSignIn());
-        const result = await dispatch(fetchAsyncGetMyProf());
-        if (fetchAsyncGetMyProf.rejected.match(result)) {
-          //認証失敗した場合
-          dispatch(setOpenSignIn());
-          return null;
-        }
-        //認証成功した場合
-        await dispatch(fetchAsyncGetPosts());
-        await dispatch(fetchAsyncGetProfs());
-        await dispatch(fetchAsyncGetComments());
-      }
-    };
-    fetchBootLoader();
-  }, [dispatch]);
-
   //画面遷移
   const history = useHistory();
-  const myFavorite = () => history.push("/Favorite");
-  const toHome = () => history.push("/")
+  const myFavorite = () => history.push("/favorite");
+  const toHome = () => history.push("/");
+  const toUserAccount = () => history.push("/user/" + profile.userProfile);
 
   return (
     <>
       <Auth />
-      <EditProfile />
       <NewPost />
       <div className={styles.header_header}>
         <h1 onClick={toHome} className={styles.header_title}>SNS</h1>
@@ -137,11 +112,7 @@ const Header: React.FC = () => {
               </Button>
               <button
                 className={styles.header_btnModal}
-                onClick={() => {
-                  dispatch(setOpenProfile());
-                  dispatch(resetOpenNewPost());
-                }}
-              >
+                onClick={toUserAccount}>
                 <StyledBadge
                   overlap="circular"
                   anchorOrigin={{

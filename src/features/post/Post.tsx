@@ -1,6 +1,7 @@
 import React, { useState  } from "react";
-import styles from "./Post.module.css";
+import { useHistory } from 'react-router-dom';
 
+import styles from "./Post.module.css";
 import { Avatar, Checkbox } from "@material-ui/core";
 import { Favorite, FavoriteBorder } from "@material-ui/icons";
 
@@ -77,11 +78,19 @@ const Post: React.FC<PROPS_POST> = ({
     await setClickPostId(postId);
   };
 
+  //画面遷移
+  const history = useHistory();
+  const toPostUserAccount = () => history.push("/user/" + userPost);
+  const toFavUserAccount = (like:number) => {
+    let favUid = liked.find(uid => uid === like);
+    history.push("/user/" + favUid);
+  };
+
   if (title) {
     return (
       <div className={styles.post}>
         <div className={styles.post_header}>
-          <Avatar className={styles.post_avatar} src={prof[0]?.img} />
+          <Avatar onClick={toPostUserAccount} className={styles.post_avatar} src={prof[0]?.img} />
           <h3>{prof[0]?.nickName}</h3>
         </div>
         <img className={styles.post_image} src={imageUrl} alt="" />
@@ -102,6 +111,7 @@ const Post: React.FC<PROPS_POST> = ({
                 className={styles.post_avatarGroup}
                 key={like}
                 src={profiles.find((prof) => prof.userProfile === like)?.img}
+                onClick={() => toFavUserAccount(like)}
               />
             ))}
           </AvatarGroup>

@@ -68,7 +68,7 @@ const Favorite: React.FC = () => {
     };
     fetchBootLoader();
     return () => { isMounted = false };
-  }, [dispatch, favpost]);
+  }, [dispatch]);
 
   return (
     <>
