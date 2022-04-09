@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Auth.module.css";
+import styles from "../post/Post.module.css";
 
 import { PROPS_USER_IMAGELIST } from "../types";
 

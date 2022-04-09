@@ -25,7 +25,7 @@ import {
 } from "../post/postSlice";
 
 import EditProfile from "./EditProfile";
-import UserPostImageList from "./UserPostImageList";
+import PostImageList from "../common/PostImageList";
 
 const UserAccount: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -109,7 +109,7 @@ const UserAccount: React.FC = () => {
           {userPosts
             .map((post) => (
               <Grid key={post.id} item xs={12} md={4}>
-                <UserPostImageList
+                <PostImageList
                   title={post.title}
                   imageUrl={post.img}
                 />

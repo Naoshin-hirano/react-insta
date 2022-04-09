@@ -20,7 +20,7 @@ import {
   fetchAsyncGetComments,
 } from "../post/postSlice";
 
-import Post from "../post/Post";
+import PostImageList from "../common/PostImageList";
 
 const Favorite: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -77,15 +77,11 @@ const Favorite: React.FC = () => {
           <div className={styles.core_posts}>
             <Grid container spacing={4}>
               {favpost
-                .map((post) => (
-                  <Grid key={post.id} item xs={12} md={4}>
-                    <Post
-                      postId={post.id}
+                .map((post, index) => (
+                  <Grid key={index} item xs={12} md={4}>
+                    <PostImageList
                       title={post.title}
-                      loginId={profile.userProfile}
-                      userPost={post.userPost}
                       imageUrl={post.img}
-                      liked={post.liked}
                     />
                   </Grid>
                 ))}
