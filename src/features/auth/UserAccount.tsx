@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useHistory, withRouter } from 'react-router-dom';
 
 import styles from "./Auth.module.css";
@@ -26,20 +26,25 @@ import {
 
 import EditProfile from "./EditProfile";
 import PostImageList from "../common/PostImageList";
+import { POST_SELECTOR, PROFILE_SELECTOR } from "../types"; 
+import { imageListFilter, getUserProfile } from "./util";
 
 const UserAccount: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const posts = useSelector(selectPosts);
-  const profile = useSelector(selectProfile);
-  const profiles = useSelector(selectProfiles);
-  
-  const [userPosts, setUserposts] = useState<Array<any>>([]);
-  const [userAccount, setUseraccount] = useState<any>();
+  const posts: POST_SELECTOR[] = useSelector(selectPosts);
+  const profile: PROFILE_SELECTOR = useSelector(selectProfile);
+  const profiles: PROFILE_SELECTOR[] = useSelector(selectProfiles);
 
   //path関連
   const history = useHistory();
   const path = history.location.pathname;
-  const uid = path.split('/user/')[1]
+  const uid = path.split('/user/')[1];
+
+  //postsをLoginUserによる投稿一覧へフィルタリング
+  const userPosts = imageListFilter(posts, Number(uid));
+
+  //profilesからpathのユーザーIDのユーザーprofileを取得
+  const userAccount = getUserProfile(profiles, Number(uid));
 
   useEffect(() => {
     const fetchBootLoader = async () => {
@@ -58,16 +63,6 @@ const UserAccount: React.FC = () => {
     };    
 
     fetchBootLoader();
-
-    //postsをLoginUserによる投稿一覧へフィルタリング
-    const cloneLists = [...posts];
-    const UserImageLists = cloneLists.filter(post => post.userPost === Number(uid));
-    setUserposts(UserImageLists);
-
-    //profilesからpathのユーザーIDのユーザーprofileを取得
-    const cloneProfiles = [...profiles];
-    const userProfile = cloneProfiles.find(user => user.userProfile === Number(uid));
-    setUseraccount(userProfile);
     
   //path(withRouter): 他ユーザーアカウント画面からloginユーザーアカウント画面へ遷移したときに再レンダリング
   //posts: ユーザーアカウント画面でreloadしたときにuseEffect再実行
@@ -78,8 +73,7 @@ const UserAccount: React.FC = () => {
       {userAccount && (
       <>
         <EditProfile
-        userAccount={userAccount}
-        setUseraccount={setUseraccount} />
+        userAccount={userAccount} />
         <div className={styles.user_allinfo}>
             <Avatar
             　style={{ height: '120px', width: '120px' }}
@@ -107,9 +101,10 @@ const UserAccount: React.FC = () => {
       <div className={styles.user_posts}>
         <Grid container spacing={4}>
           {userPosts
-            .map((post) => (
+            .map((post:any) => (
               <Grid key={post.id} item xs={12} md={4}>
                 <PostImageList
+                  postId={post.id}
                   title={post.title}
                   imageUrl={post.img}
                 />

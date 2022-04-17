@@ -55,7 +55,6 @@ const EditProfile: React.FC<any> = (props:any) => {
     await dispatch(fetchCredEnd());
     dispatch(resetOpenProfile());
     setImage(null);
-    props.setUseraccount(profile);
   };
 
   const handlerEditPicture = () => {

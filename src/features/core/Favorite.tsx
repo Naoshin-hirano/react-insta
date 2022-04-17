@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import styles from "./Core.module.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,17 +21,18 @@ import {
 } from "../post/postSlice";
 
 import PostImageList from "../common/PostImageList";
+import { POST_SELECTOR, PROFILE_SELECTOR } from "../types"; 
+import { favFilter } from "./util";
 
 const Favorite: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const profile = useSelector(selectProfile);
-  const posts = useSelector(selectPosts);
-  const [favpost, setFavposts] = useState<Array<any>>([]);
+  const profile: PROFILE_SELECTOR = useSelector(selectProfile);
+  const posts: POST_SELECTOR[] = useSelector(selectPosts);
+
+  // お気に入り登録した投稿のみにフィルタリング
+  const favPosts = favFilter(posts, profile);
 
   useEffect(() => {
-    
-    //アンマウントされたらstate更新しないように制御
-    let isMounted = true
 
     const fetchBootLoader = async () => {
       if (localStorage.localJWT) {
@@ -47,42 +48,27 @@ const Favorite: React.FC = () => {
         await dispatch(fetchAsyncGetProfs());
         await dispatch(fetchAsyncGetComments());
 
-
-        //postsをお気に入り登録した投稿のみにフィルタリング
-        let copyLists = [...posts]
-        const fav = copyLists.map((post) => {
-        　　if(post.liked.includes(profile.userProfile)){
-            return post
-          }
-        })
-        const array = [];
-        for (let f = 0; f < fav.length; f++ ){
-          if (fav[f] == undefined) continue;
-          array.push(fav[f]);
-        }
-        if(isMounted){
-          setFavposts(array);
-        }
-
       }
     };
     fetchBootLoader();
-    return () => { isMounted = false };
+
   }, [dispatch]);
 
   return (
     <>
-      {favpost && (
+      {favPosts && (
         <>
           <div className={styles.core_posts}>
             <Grid container spacing={4}>
-              {favpost
+              {favPosts
                 .map((post, index) => (
                   <Grid key={index} item xs={12} md={4}>
-                    <PostImageList
+                    {post && (
+                      <PostImageList
+                      postId={post.id}
                       title={post.title}
                       imageUrl={post.img}
-                    />
+                    />)}
                   </Grid>
                 ))}
             </Grid>
