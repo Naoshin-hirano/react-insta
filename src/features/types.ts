@@ -45,6 +45,7 @@ liked: number[];
 // UserPostImageList.tsx
 export interface PROPS_USER_IMAGELIST {
   title: string;
+  postId: number;
   imageUrl: string;
 }
 //CommentModal.tsx
@@ -78,4 +79,29 @@ export interface PROFILE_ON_COMMENT {
     userProfile: number;
     created_on: string;
     img: string;
+}
+
+// selector
+export interface POST_SELECTOR {
+    id: number;
+    title: string;
+    userPost: number;
+    created_on: string;
+    img: string;
+    liked: number[];
+}
+
+export interface PROFILE_SELECTOR {
+    id: number;
+    nickName: string;
+    userProfile: number;
+    created_on: string;
+    img: string;
+}
+
+export interface COMMENT_SELECTOR {
+    id: number;
+    text: string;
+    userComment: number;
+    post: number;
 }
