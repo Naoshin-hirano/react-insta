@@ -46,6 +46,12 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
+/**
+ * 1つの投稿に対してのコメント一覧表示モーダル
+ * 
+ * @param {PROPS_COMMENTS_ON_COMMENT_MODAL} props プロップス
+ * @returns コメント一覧表示モーダルコンポーネント
+ */
 const CommentModal: React.FC<PROPS_COMMENTS_ON_COMMENT_MODAL> = ( props ) => {
 
   const { commentsOnPost, prof } = props;

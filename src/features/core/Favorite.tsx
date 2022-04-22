@@ -20,10 +20,15 @@ import {
   fetchAsyncGetComments,
 } from "../post/postSlice";
 
-import PostImageList from "../common/PostImageList";
+import { PostImageList } from "../common/PostImageList";
 import { POST_SELECTOR, PROFILE_SELECTOR } from "../types"; 
 import { favFilter } from "./util";
 
+/**
+ * お気に入り登録一覧画面
+ * 
+ * @returns お気に入り登録一覧画像を表示した画面
+ */
 const Favorite: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const profile: PROFILE_SELECTOR = useSelector(selectProfile);
@@ -39,11 +44,11 @@ const Favorite: React.FC = () => {
         dispatch(resetOpenSignIn());
         const result = await dispatch(fetchAsyncGetMyProf());
         if (fetchAsyncGetMyProf.rejected.match(result)) {
-          //認証失敗した場合
+          // 認証失敗した場合
           dispatch(setOpenSignIn());
           return null;
         }
-        //認証成功した場合
+        // 認証成功した場合
         await dispatch(fetchAsyncGetPosts());
         await dispatch(fetchAsyncGetProfs());
         await dispatch(fetchAsyncGetComments());

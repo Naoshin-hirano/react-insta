@@ -65,13 +65,18 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
+/**
+ * ヘッダー画面
+ * 
+ * @returns ヘッダー部分の機能のコンポーネント
+ */
 const Header: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const profile = useSelector(selectProfile);
   const isLoadingPost = useSelector(selectIsLoadingPost);
   const isLoadingAuth = useSelector(selectIsLoadingAuth);
 
-  //画面遷移
+  // 画面遷移
   const history = useHistory();
   const myFavorite = () => history.push("/favorite");
   const toHome = () => history.push("/");

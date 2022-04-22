@@ -66,6 +66,16 @@ export interface PROPS_COMMENTS_ON_COMMENT_MODAL {
   }
 }
 
+export interface EDIT_PROFILE {
+  userAccount: {
+    id: number;
+    nickName: string;
+    userProfile: number;
+    created_on: string;
+    img: string;
+  }
+}
+
 export interface COMMENT_ON_MODAL {
     id: number;
     text: string;

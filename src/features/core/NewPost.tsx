@@ -37,6 +37,11 @@ const avatarStyles = {
   heigth: 300,
 };
 
+/**
+ * 新規投稿のモーダル画面
+ * 
+ * @returns 新規投稿のモーダルコンポーネント
+ */
 const NewPost: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const openNewPost = useSelector(selectOpenNewPost);
@@ -82,7 +87,7 @@ const NewPost: React.FC = () => {
           />
           <Spacer size={10}/>
           <Grid container justifyContent="center">
-           {image ? <img data-testid="handler" style={avatarStyles} src={upload_file_url}/> : ""}
+           {image ? <img data-testid="handler" style={avatarStyles} src={upload_file_url} alt="imageURL"/> : ""}
           </Grid>
           <input
             type="file"

@@ -4,7 +4,15 @@ import { useHistory } from 'react-router-dom';
 
 import { PROPS_USER_IMAGELIST } from "../types";
 
-const PostImageList: React.FC<PROPS_USER_IMAGELIST> = ({
+/**
+ * 投稿一覧情報の画像一覧をリストレンダリング
+ * 
+ * @param {string} title 投稿のタイトル
+ * @param {number} postId 投稿のID
+ * @param {string} imageUrl 投稿の画像URL
+ * @returns 投稿一覧の画像一覧
+ */
+export const PostImageList: React.FC<PROPS_USER_IMAGELIST> = ({
   title,
   postId,
   imageUrl,
@@ -23,5 +31,3 @@ const PostImageList: React.FC<PROPS_USER_IMAGELIST> = ({
   }
   return null;
 };
-
-export default PostImageList;

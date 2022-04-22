@@ -25,25 +25,30 @@ import {
 } from "../post/postSlice";
 
 import EditProfile from "./EditProfile";
-import PostImageList from "../common/PostImageList";
+import { PostImageList } from "../common/PostImageList";
 import { POST_SELECTOR, PROFILE_SELECTOR } from "../types"; 
 import { imageListFilter, getUserProfile } from "./util";
 
+/**
+ * userアカウントページ
+ * 
+ * @returns userアカウントページのコンポーネント
+ */
 const UserAccount: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const posts: POST_SELECTOR[] = useSelector(selectPosts);
   const profile: PROFILE_SELECTOR = useSelector(selectProfile);
   const profiles: PROFILE_SELECTOR[] = useSelector(selectProfiles);
 
-  //path関連
+  // path関連
   const history = useHistory();
   const path = history.location.pathname;
   const uid = path.split('/user/')[1];
 
-  //postsをLoginUserによる投稿一覧へフィルタリング
+  // postsをLoginUserによる投稿一覧へフィルタリング
   const userPosts = imageListFilter(posts, Number(uid));
 
-  //profilesからpathのユーザーIDのユーザーprofileを取得
+  // profilesからpathのユーザーIDのユーザーprofileを取得
   const userAccount = getUserProfile(profiles, Number(uid));
 
   useEffect(() => {
@@ -52,11 +57,11 @@ const UserAccount: React.FC = () => {
         dispatch(resetOpenSignIn());
         const result = await dispatch(fetchAsyncGetMyProf());
         if (fetchAsyncGetMyProf.rejected.match(result)) {
-          //認証失敗した場合
+          // 認証失敗した場合
           dispatch(setOpenSignIn());
           return null;
         }
-        //認証成功した場合
+        // 認証成功した場合
         await dispatch(fetchAsyncGetPosts());
         await dispatch(fetchAsyncGetProfs());
       }
@@ -64,8 +69,8 @@ const UserAccount: React.FC = () => {
 
     fetchBootLoader();
     
-  //path(withRouter): 他ユーザーアカウント画面からloginユーザーアカウント画面へ遷移したときに再レンダリング
-  //posts: ユーザーアカウント画面でreloadしたときにuseEffect再実行
+  // path(withRouter): 他ユーザーアカウント画面からloginユーザーアカウント画面へ遷移したときに再レンダリング
+  // posts: ユーザーアカウント画面でreloadしたときにuseEffect再実行
   }, [dispatch, path]);
 
   return (
@@ -116,5 +121,5 @@ const UserAccount: React.FC = () => {
     </>
   );
 };
-//path変更時に再レンダリングされるように使用
+// path変更時に再レンダリングされるように使用
 export default withRouter(UserAccount);

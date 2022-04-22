@@ -56,6 +56,11 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
+/**
+ * 投稿詳細画面
+ * 
+ * @returns 投稿詳細画面のコンポーネント
+ */
 const PostDetail: React.FC = () => {
 
     const dispatch: AppDispatch = useDispatch();
@@ -74,7 +79,7 @@ const PostDetail: React.FC = () => {
     // 全ての投稿から当画面の投稿を探す
     const pagePost: any = posts.find(post => post.id === Number(postId));
 
-    //全てのusersから当画面の投稿主userを探す
+    // 全てのusersから当画面の投稿主userを探す
     const postUser: any = profiles.find(user => user.userProfile === Number(pagePost?.userPost));
 
     // 全てのコメントから当画面に投稿されているコメントを探す

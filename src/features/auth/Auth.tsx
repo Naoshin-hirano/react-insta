@@ -10,16 +10,16 @@ import { TextField, Button, CircularProgress } from "@material-ui/core";
 import { fetchAsyncGetPosts, fetchAsyncGetComments } from "../post/postSlice";
 
 import {
-  //selector
+  // selector
   selectIsLoadingAuth,
   selectOpenSignIn,
   selectOpenSignUp,
-  //actions
+  // actions
   setOpenSignIn,
   resetOpenSignIn,
   setOpenSignUp,
   resetOpenSignUp,
-  //ReduxThunk
+  // ReduxThunk
   fetchCredStart,
   fetchCredEnd,
   fetchAsyncLogin,
@@ -45,6 +45,11 @@ const customStyles = {
   },
 };
 
+/**
+ * 新規登録・ログイン登録画面
+ * 
+ * @returns 新規登録・ログインの登録モーダル
+ */
 const Auth: React.FC = () => {
   Modal.setAppElement("#root");
   const openSignIn = useSelector(selectOpenSignIn);
@@ -52,7 +57,6 @@ const Auth: React.FC = () => {
   const isLoadingAuth = useSelector(selectIsLoadingAuth);
   const dispatch: AppDispatch = useDispatch();
 
-  //新規登録・ログインのモーダル
   return (
     <>
       <Modal
@@ -70,7 +74,7 @@ const Auth: React.FC = () => {
             const resultReg = await dispatch(fetchAsyncRegister(values));
 
             if (fetchAsyncRegister.fulfilled.match(resultReg)) {
-              //新規登録が完了したら, その登録したvalues(emailとpassword)を元にログインも行う
+              // 新規登録が完了したら, その登録したvalues(emailとpassword)を元にログインも行う
               await dispatch(fetchAsyncLogin(values));
               await dispatch(fetchAsyncCreateProf({ nickName: "anonymous" }));
 

@@ -24,6 +24,17 @@ import {
 
 import { PROPS_POST } from "../types";
 
+/**
+ * 1つの投稿
+ * 
+ * @param {number} postId 投稿ID
+ * @param {number} loginId ログインユーザーID
+ * @param {number} userPost 投稿主userID
+ * @param {string} title 投稿タイトル
+ * @param {string} imageUrl 投稿のイメージURL
+ * @param {number[]} liked 投稿にいいね登録したユーザーID
+ * @returns 1つの投稿のコンポーネント
+ */
 const Post: React.FC<PROPS_POST> = ({
   postId,
   loginId,
@@ -36,17 +47,17 @@ const Post: React.FC<PROPS_POST> = ({
   const profiles = useSelector(selectProfiles);
   
   const [text, setText] = useState("");
-  //クリックした投稿ID
+  // クリックした投稿ID
   const [clickPostId, setClickPostId] = useState(0);
 
-  //投稿のコメント
+  // 投稿のコメント
   const comments = useSelector(selectComments);
-  //投稿のuser情報
+  // 投稿のuser情報
   const prof = profiles.filter((prof) => {
     return prof.userProfile === userPost;
   });
 
-  //その投稿IDのコメントであることを定義
+  // その投稿IDのコメントであることを定義
   const commentsOnPost = comments.filter((com) => {
     return com.post === postId;
   });
@@ -78,7 +89,7 @@ const Post: React.FC<PROPS_POST> = ({
     await setClickPostId(postId);
   };
 
-  //画面遷移
+  // 画面遷移
   const history = useHistory();
   const toPostUserAccount = () => history.push("/user/" + userPost);
   const toFavUserAccount = (like:number) => {

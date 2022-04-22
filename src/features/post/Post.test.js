@@ -9,7 +9,7 @@ import Post from "./Post";
 
 afterEach(() => cleanup());
 
-//likedの数がレンダリングされるかの確認
+// likedの数がレンダリングされるかの確認
 describe("Rendering the liked counter", () => {
   let store;
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe("Rendering the liked counter", () => {
     });
   });
 
-  //いいねが0だとcounterになにも表示されない
+  // いいねが0だとcounterになにも表示されない
   it("Should render nothing ! when getting no liked", () => {
     render(
         <Provider store={store}>
@@ -37,7 +37,7 @@ describe("Rendering the liked counter", () => {
     expect(screen.queryByTestId("counter")).not.toHaveTextContent();
   });
 
-  //1いいねあればcounterに１が表示される
+  // 1いいねあればcounterに１が表示される
   it("Should render 1 ! when getting 1 liked", () => {
     render(
         <Provider store={store}>
@@ -52,7 +52,7 @@ describe("Rendering the liked counter", () => {
     expect(screen.getByTestId("counter")).toHaveTextContent("1");
   });
 
-  //4いいねあればcounterに4が表示される
+  // 4いいねあればcounterに4が表示される
   it("Should render 4 ! when getting 4 liked", () => {
     render(
         <Provider store={store}>

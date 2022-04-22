@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 
 import { Spacer} from "../common/Spacer";
-import { File } from "../types";
 
 import {
   editNickname,
@@ -20,6 +19,8 @@ import {
 
 import { Button, TextField, IconButton, Grid } from "@material-ui/core";
 import { MdAddAPhoto } from "react-icons/md";
+
+import { File, EDIT_PROFILE } from "../types";
 
 const customStyles = {
   content: {
@@ -39,7 +40,13 @@ const avatarStyles = {
   heigth: 300,
 };
 
-const EditProfile: React.FC<any> = (props:any) => {
+/**
+ * userプロフィール編集用のモーダルコンポーネント
+ * 
+ * @param {EDIT_PROFILE} props プロップス
+ * @returns userアカウント編集モーダルのコンポーネント
+ */
+const EditProfile: React.FC<EDIT_PROFILE> = (props: EDIT_PROFILE) => {
   const dispatch: AppDispatch = useDispatch();
   const openProfile = useSelector(selectOpenProfile);
   const profile = useSelector(selectProfile);
