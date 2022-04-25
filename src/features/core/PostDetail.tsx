@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 
@@ -18,16 +18,11 @@ import { AppDispatch } from "../../app/store";
 import {
     selectProfile,
     selectProfiles, 
-    resetOpenSignIn,
-    fetchAsyncGetMyProf,
-    setOpenSignIn,
-    fetchAsyncGetProfs,
 } from "../auth/authSlice";
 
 import { 
     selectComments,
     selectPosts,
-    fetchAsyncGetPosts,
     fetchPostStart,
     fetchAsyncPostComment,
     fetchPostEnd,
@@ -41,6 +36,7 @@ import {
     PROFILE_ON_COMMENT,
 } from '../types';
 import { pageComments } from '../post/util';
+import { useConfirmJwt } from "../../customhooks/useConfirmJwt";
 
 const useStyles = makeStyles((theme) => ({
     medium: {
@@ -116,26 +112,8 @@ const PostDetail: React.FC = () => {
         setText("");
       };
   
-    useEffect(() => {
-      const fetchBootLoader = async () => {
-        if (localStorage.localJWT) {
-          dispatch(resetOpenSignIn());
-          const result = await dispatch(fetchAsyncGetMyProf());
-          if (fetchAsyncGetMyProf.rejected.match(result)) {
-            //認証失敗した場合
-            dispatch(setOpenSignIn());
-            return null;
-          }
-          //認証成功した場合
-          await dispatch(fetchAsyncGetPosts());
-          await dispatch(fetchAsyncGetProfs());
-
-        };
-      };
-  
-      fetchBootLoader();
-      
-    }, [dispatch, path]);
+    // JWTがローカルストレージにあるか否かでログインするかしないかを判断する
+    useConfirmJwt();
 
   return (
       <>

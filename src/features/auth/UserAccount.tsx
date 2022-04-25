@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory, withRouter } from 'react-router-dom';
 
 import styles from "./Auth.module.css";
@@ -9,10 +9,6 @@ import { Grid, Avatar } from "@material-ui/core";
 import { Spacer } from "../common/Spacer";
 
 import {
-  setOpenSignIn,
-  resetOpenSignIn,
-  fetchAsyncGetMyProf,
-  fetchAsyncGetProfs,
   selectProfiles,
   selectProfile,
   setOpenProfile
@@ -20,7 +16,6 @@ import {
 
 import {
   selectPosts,
-  fetchAsyncGetPosts,
   resetOpenNewPost
 } from "../post/postSlice";
 
@@ -28,6 +23,8 @@ import EditProfile from "./EditProfile";
 import { PostImageList } from "../common/PostImageList";
 import { POST_SELECTOR, PROFILE_SELECTOR } from "../types"; 
 import { imageListFilter, getUserProfile } from "./util";
+import { useConfirmJwt } from "../../customhooks/useConfirmJwt";
+
 
 /**
  * userアカウントページ
@@ -51,27 +48,8 @@ const UserAccount: React.FC = () => {
   // profilesからpathのユーザーIDのユーザーprofileを取得
   const userAccount = getUserProfile(profiles, Number(uid));
 
-  useEffect(() => {
-    const fetchBootLoader = async () => {
-      if (localStorage.localJWT) {
-        dispatch(resetOpenSignIn());
-        const result = await dispatch(fetchAsyncGetMyProf());
-        if (fetchAsyncGetMyProf.rejected.match(result)) {
-          // 認証失敗した場合
-          dispatch(setOpenSignIn());
-          return null;
-        }
-        // 認証成功した場合
-        await dispatch(fetchAsyncGetPosts());
-        await dispatch(fetchAsyncGetProfs());
-      }
-    };    
-
-    fetchBootLoader();
-    
-  // path(withRouter): 他ユーザーアカウント画面からloginユーザーアカウント画面へ遷移したときに再レンダリング
-  // posts: ユーザーアカウント画面でreloadしたときにuseEffect再実行
-  }, [dispatch, path]);
+  // JWTがローカルストレージにあるか否かでログインするかしないかを判断する
+  useConfirmJwt(path);
 
   return (
     <>
